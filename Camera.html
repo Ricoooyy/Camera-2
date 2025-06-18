@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kamera Web</title>
+  <style>
+    video {
+      width: 100%;
+      height: auto;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Aplikasi Kamera Sederhana</h2>
+  <video id="video" autoplay></video>
+  <br>
+  <button onclick="ambilFoto()">Ambil Foto</button>
+  <br>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <img id="hasil" />
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const hasil = document.getElementById('hasil');
+
+    // Minta izin akses kamera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error('Gagal mengakses kamera:', err);
+        alert('Tidak bisa mengakses kamera. Pastikan izinnya sudah diaktifkan.');
+      });
+
+    function ambilFoto() {
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      hasil.src = canvas.toDataURL('image/png');
+    }
+  </script>
+</body>
+</html>
